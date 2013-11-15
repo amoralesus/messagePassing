@@ -28,7 +28,7 @@
 				<key>Height</key>
 				<real>500</real>
 				<key>Identifier</key>
-				<string>searchResults</string>
+				<string>searchResultsPopover</string>
 				<key>Width</key>
 				<real>600</real>
 			</dict>
@@ -39,7 +39,7 @@
 				<key>Command</key>
 				<string>openPopup</string>
 				<key>Identifier</key>
-				<string>searchResults</string>
+				<string>searchResultsToolbarItem</string>
 				<key>Image</key>
 				<string>read.png</string>
 				<key>Label</key>

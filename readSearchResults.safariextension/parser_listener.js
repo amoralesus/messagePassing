@@ -1,3 +1,4 @@
+
 function handleMessage(msgEvent) {
   var messageName = msgEvent.name;
   var messageData = msgEvent.message;
@@ -9,9 +10,10 @@ function handleMessage(msgEvent) {
 
 function parseResults() {
   var results = $(document).find('.r a');
-  var links = $.map(results, function (n) {
-    return n.href;
-  });
+  var links = []
+  for(var i = 0; i < results.size(); i++) {
+    links[i] = {href:results[i].href, text:results[i].text};
+  }
   return links;
 };
 

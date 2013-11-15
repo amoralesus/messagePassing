@@ -2,8 +2,8 @@ var performCommand, validateCommand;
 
 performCommand = function(event) {
   if (event.command === 'openPopup') {
+    showPopover('searchResultsPopover', 'searchResultsToolbarItem' );
     safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("parseResults", "_no_payload_in_this_message_");
-    // safari.extension.toolbarItems[0].showPopover();
   }
 }
 
@@ -16,15 +16,26 @@ validateCommand = function(event) {
 
 function receiveMessage(theMessageEvent) {
   if(theMessageEvent.name === "resultsParsed") {
-    var results = theMessageEvent.message;
-    text = "Found: " + results.length.toString() + " results.";
-    text += "\nLinks shown below:\n"; 
-    for(var i = 0; i < results.length; i++) {
-      text += "\n" + results[i];
-    }
-    alert(text);
+    var popover = getPopover('searchResultsPopover');
+    popover.contentWindow.populateSearchResults(theMessageEvent.message);
   }
 }
+
+function getPopover(identifier) {
+  return safari.extension.popovers.filter(function (po) { return po.identifier == identifier})[0];
+}
+
+function showPopover(popoverIdentifier, toolbarItemIdentifier) {
+  var toolbarItem = safari.extension.toolbarItems.filter(function (tbi) {
+    return tbi.identifier == toolbarItemIdentifier && tbi.browserWindow == safari.application.activeBrowserWindow;
+  })[0];
+  var popover = safari.extension.popovers.filter(function (po) {
+    return po.identifier == popoverIdentifier;
+  })[0];
+  toolbarItem.popover = popover;
+  toolbarItem.showPopover();
+}
+
 
 
 safari.application.addEventListener("command", performCommand, true);
