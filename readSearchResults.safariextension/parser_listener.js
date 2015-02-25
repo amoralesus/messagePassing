@@ -8,14 +8,25 @@ function handleMessage(msgEvent) {
   }
 };
 
-function parseResults() {
-  var results = $(document).find('.r a');
-  var links = []
-  for(var i = 0; i < results.size(); i++) {
-    links[i] = {href:results[i].href, text:results[i].text};
-  }
-  return links;
+var get_images = function () {
+
+  var images = $(document).find('img').map(function () {
+    return {url: $(this).attr('src'), naturalWidth: this.naturalWidth, naturalHeight: this.naturalHeight}; // return the url and the full object
+  }).get();
+
+   // sort the images by image size; naturalWidth appears to be the actual image size
+  images.sort(function(a,b) {
+    return ((a.naturalWidth * a.naturalHeight) < (b.naturalWidth * b.naturalHeight))
+  });
+
+  return images;
 };
 
+function parseResults() {
+  var snippet = $('body').text();
+  var title = document.title;
+  var images = get_images();
+  return { snippet: snippet, title: title, images: images };
+};
 
 safari.self.addEventListener("message", handleMessage, false);
